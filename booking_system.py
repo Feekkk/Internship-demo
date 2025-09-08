@@ -9,6 +9,13 @@ print("For any assistance, contact support@unikl.edu.my")
 print("Enjoy your experience!")
 print("Goodbye!")
 
+input("Press C to continue or Exit to quit: ")
+if input().strip().lower() == "c":
+    print("Continuing...")
+else:
+    print("Exiting...")
+    exit()
+
 class UserAccount:
     def __init__(self):
         self.username = ""
@@ -18,13 +25,13 @@ user1 = UserAccount()
 user1.username = "admin"
 user1.password = "admin123"
 
-input = input("Enter your username: ")
-if input == user1.username:
+username_input = input("Enter your username: ")
+if username_input == user1.username:
     print("Username found.")
 else:
     print("Username not found.")
-    input_pass = input("Enter your password: ")
-    if input_pass == user1.password:
+    password_input = input("Enter your password: ")
+    if password_input == user1.password:
         print("Login successful!")
     else:
         print("Incorrect password.")
