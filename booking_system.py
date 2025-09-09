@@ -51,8 +51,8 @@ class BookingApp:
         ttk.Button(menu_frame, text="📅 Book a Class", width=25, 
                   command=self.book_class_window).pack(pady=10)
 
-        ttk.Button(menu_frame, text="📖 Booking Description", width=25,
-                  command=lambda: messagebox.showinfo("Info", "Booking Description feature coming soon!")).pack(pady=10)
+        ttk.Button(menu_frame, text="📖 Class Description", width=25,
+                  command=self.room_description).pack(pady=10)
 
         ttk.Button(menu_frame, text="👀 View My Bookings", width=25,
                   command=lambda: messagebox.showinfo("Info", "View Bookings feature coming soon!")).pack(pady=10)
@@ -113,10 +113,34 @@ class BookingApp:
             messagebox.showerror("Error", "Please fill in all fields.")
             return
 
-        # Here you would normally save the booking to a database or file
         messagebox.showinfo("Booking Confirmed", f"You have booked {selected_class} on {selected_date} at {selected_time}.")
         self.open_booking_window()
 
+    def room_description(self):
+        messagebox.showinfo("Class description", "This system allows students to book classes in various subjects.")
+    
+    # clear current window
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+    # booking interface
+        self.root.geometry("600x500")
+        self.root.title("UniKL Class System - Class Description")
+
+        booking_frame = ttk.Frame(self.root, padding=20)
+        booking_frame.pack(fill=tk.BOTH, expand=True)
+
+        ttk.Label(booking_frame, text="Class Description", font=("Arial", 16, "bold")).pack(pady=10)
+        description = ("This system allows students to book classes in various subjects.\n"
+                       "Available classes include:\n"
+                       "- Math 101\n"
+                       "- Physics 201\n"
+                       "- Chemistry 301\n"
+                       "- Biology 401\n\n"
+                       "Please use the 'Book a Class' option to schedule your classes.")
+        ttk.Label(booking_frame, text=description, wraplength=500, justify=tk.LEFT).pack(pady=10)
+        ttk.Button(booking_frame, text="Back to Menu", command=self.open_booking_window).pack(pady=20)
+       
 if __name__ == "__main__":
     root = tk.Tk()
     app = BookingApp(root)
