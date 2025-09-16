@@ -55,13 +55,37 @@ class BookingApp:
                   command=self.room_description).pack(pady=10)
 
         ttk.Button(menu_frame, text="👀 View My Bookings", width=25,
-                  command=lambda: messagebox.showinfo("Info", "View Bookings feature coming soon!")).pack(pady=10)
-        
-        ttk.Button(menu_frame, text="❌ Cancel Booking", width=25,
-                  command=lambda: messagebox.showinfo("Info", "Cancel Booking feature coming soon!")).pack(pady=10)
-        
+                  command=self.view_bookings).pack(pady=10)
         ttk.Button(menu_frame, text="🚪 Exit", width=25, command=self.root.quit).pack(pady=10)
 
+    def view_bookings(self):
+        # Try to read the bookings.txt file and show the contents
+        try:
+            with open("bookings.txt", "r", encoding="utf-8") as f:
+                bookings = f.readlines()
+        except FileNotFoundError:
+            bookings = []
+        except Exception as e:
+            messagebox.showerror("File Error", f"Could not read bookings: {e}")
+            return
+
+        # Prepare the message
+        if not bookings:
+            msg = "No bookings found."
+        else:
+            msg = "Your Booking History:\n\n" + "".join(bookings)
+
+        # Show in a new window for better readability
+        history_win = tk.Toplevel(self.root)
+        history_win.title("My Bookings")
+        history_win.geometry("500x400")
+        ttk.Label(history_win, text="My Booking History", font=("Arial", 14, "bold")).pack(pady=10)
+        text_widget = tk.Text(history_win, wrap=tk.WORD, height=18, width=60)
+        text_widget.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
+        text_widget.insert(tk.END, msg)
+        text_widget.config(state=tk.DISABLED)
+        ttk.Button(history_win, text="Close", command=history_win.destroy).pack(pady=10)
+                
     def book_class_window(self):
         """"Open a new window to book a class"""
 
@@ -111,6 +135,14 @@ class BookingApp:
 
         if not selected_class or not selected_date or not selected_time:
             messagebox.showerror("Error", "Please fill in all fields.")
+            return
+
+        # Save booking details to a txt file
+        try:
+            with open("bookings.txt", "a", encoding="utf-8") as f:
+                f.write(f"Class: {selected_class}, Date: {selected_date}, Time: {selected_time}\n")
+        except Exception as e:
+            messagebox.showerror("File Error", f"Could not save booking: {e}")
             return
 
         messagebox.showinfo("Booking Confirmed", f"You have booked {selected_class} on {selected_date} at {selected_time}.")
